@@ -1,0 +1,43 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+        - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: projectx
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - projectx-network
+
+  spring-app:
+    image: project-x:latest
+    container_name: spring-app
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+#      SPRING_PROFILES_ACTIVE: production
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_DB: projectx
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: example
+    depends_on:
+      - mongo
+    volumes:
+      - ./logs:/logs
+      - ./config:/config
+    networks:
+      - projectx-network
+
+
+networks:
+    projectx-network:
+        driver: bridge
