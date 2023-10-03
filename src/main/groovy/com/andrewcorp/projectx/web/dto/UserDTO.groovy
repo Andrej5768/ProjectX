@@ -1,5 +1,6 @@
 package com.andrewcorp.projectx.web.dto
 
+import groovy.transform.CompileStatic
 import jakarta.annotation.Nullable
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size

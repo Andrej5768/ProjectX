@@ -1,20 +1,21 @@
 package com.andrewcorp.projectx.web.dto
 
+import groovy.transform.CompileStatic
 import jakarta.annotation.Nullable
+
+import java.time.LocalDateTime
 
 /**
  *
  * @author Andrew
  * @since 02.10.2023
  */
+@CompileStatic
 class CommentDTO {
-    @Nullable
     private Long id
-    @Nullable
     private String username
     private String content
-    @Nullable
-    private String timestamp
+    private LocalDateTime timestamp
 
     Long getId() {
         return id
@@ -24,12 +25,11 @@ class CommentDTO {
         this.id = id
     }
 
-    @Nullable
     String getUsername() {
         return username
     }
 
-    void setUsername(@Nullable String username) {
+    void setUsername(String username) {
         this.username = username
     }
 
@@ -41,11 +41,11 @@ class CommentDTO {
         this.content = content
     }
 
-    String getTimestamp() {
+    LocalDateTime getTimestamp() {
         return timestamp
     }
 
-    void setTimestamp(String timestamp) {
+    void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp
     }
 }

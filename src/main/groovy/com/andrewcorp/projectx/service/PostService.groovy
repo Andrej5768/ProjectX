@@ -11,6 +11,9 @@ import com.andrewcorp.projectx.persistence.repository.PostRepository
 import com.andrewcorp.projectx.persistence.repository.UserRepository
 import com.andrewcorp.projectx.web.error.PostNotFoundException
 import com.andrewcorp.projectx.web.error.UserNotFoundException
+import groovy.util.logging.Slf4j
+import org.slf4j.Logger
+import org.springframework.stereotype.Service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -21,16 +24,21 @@ import java.time.LocalDateTime
  * @author Andrew
  * @since 02.10.2023
  */
+
+@Slf4j
 @Service
 class PostService {
-    private static final Logger logger = LoggerFactory.getLogger(PostService.class)
-
     private final PostRepository postRepository
     private final UserRepository userRepository
     private final LikeService likeService
     private final CommentRepository commentRepository
 
-    PostService(PostRepository postRepository, UserRepository userRepository, LikeService likeService, CommentRepository commentRepository) {
+    PostService(
+            PostRepository postRepository,
+            UserRepository userRepository,
+            LikeService likeService,
+            CommentRepository commentRepository
+    ) {
         this.postRepository = postRepository
         this.userRepository = userRepository
         this.likeService = likeService
@@ -38,33 +46,25 @@ class PostService {
     }
 
     PostDTO createPost(PostDTO postDTO) {
-        Long userId = postDTO.userId
-        logger.info("Creating post for user with id {}", userId)
-        def user = userRepository.findById(userId)
+        log.info("Creating post for user with id {}", postDTO.userId)
+        def user = userRepository.findById(postDTO.userId)
         if (!user.isPresent()) {
-            throw new UserNotFoundException("User with id ${userId} not found")
+            throw new UserNotFoundException("User with id ${postDTO.userId} not found")
         }
 
         def post = new Post(
-                userId: userId,
+                userId: postDTO.userId,
                 content: postDTO.content,
                 timestamp: LocalDateTime.now(),
         )
 
         post = postRepository.save(post)
-        logger.info("Post with id {} created for user with id {}", post.id, userId)
-        return new PostDTO(
-                id: post.id,
-                userId: post.userId,
-                content: post.content,
-                timestamp: post.timestamp,
-                likes: post.likes.size(),
-                likedBy: new ArrayList<String>()
-        )
+        log.info("Post with id {} created for user with id {}", post.id, postDTO.userId)
+        return getPostDto(post)
     }
 
     PostDTO updatePost(Long postId, PostDTO postDTO) {
-        logger.info("Updating post with id {}", postId)
+        log.info("Updating post with id {}", postId)
         def existingPost = postRepository.findById(postId)
         if (!existingPost.isPresent()) {
             throw new PostNotFoundException("Post with id ${postId} not found")
@@ -76,67 +76,55 @@ class PostService {
         }
 
         def post = postRepository.save(postFromDb)
-        logger.info("Post with id {} updated", postId)
+        log.info("Post with id {} updated", postId)
         return getPostDto(post)
     }
 
     void deletePost(Long postId) {
-        logger.info("Deleting post with id {}", postId)
+        log.info("Deleting post with id {}", postId)
         def existingPost = postRepository.findById(postId)
         if (!existingPost.isPresent()) {
             throw new PostNotFoundException("Post with id ${postId} not found")
         }
-        logger.info("Deleting likes for post with id {}", postId)
+        log.info("Deleting likes for post with id {}", postId)
         likeService.deleteLikesByPost(postId)
         postRepository.deleteById(postId)
     }
 
     PostDTO getPost(Long postId) {
-        logger.info("Getting post with id {}", postId)
+        log.info("Getting post with id {}", postId)
         def existingPost = postRepository.findById(postId)
         if (!existingPost.isPresent()) {
             throw new PostNotFoundException("Post with id ${postId} not found")
         }
-        logger.info("Post with id {} found", postId)
+        log.info("Post with id {} found", postId)
         return getPostDto(existingPost.get())
     }
 
-
     List<PostDTO> getPostsByUser(Long userId) {
-        logger.info("Getting posts for user with id {}", userId)
+        log.info("Getting posts for user with id {}", userId)
         User user = userRepository.findById(userId).orElse(null)
         if (user == null) {
             throw new UserNotFoundException("User with id ${userId} not found")
         }
         List<Post> posts = postRepository.findAllByUserId(userId)
-        logger.info("Found {} posts for user with id {}", posts.size(), userId)
+        log.info("Found {} posts for user with id {}", posts.size(), userId)
         return posts.collect { post -> getPostDto(post)}
     }
 
     List<PostDTO> getFeedByUser(Long userId) {
-        logger.info("Getting feed for user with id {}", userId)
+        log.info("Getting feed for user with id {}", userId)
         User user = userRepository.findById(userId).orElse(null)
         if (user == null) {
             throw new UserNotFoundException("User with id ${userId} not found")
         }
         List<Post> posts = postRepository.findAllByUserIdIn(user.following)
-        logger.info("Found {} posts for user with id {}", posts.size(), userId)
+        log.info("Found {} posts for user with id {}", posts.size(), userId)
         return posts.collect { post -> getPostDto(post)}
     }
 
-    PostDTO getPostDto(Post post) {
-        return new PostDTO(
-                id: post.id,
-                userId: post.userId,
-                content: post.content,
-                timestamp: post.timestamp,
-                likes: post.likes.size(),
-                likedBy: post.likes.collect { like -> userRepository.findById(like.userId).get().username }
-        )
-    }
-
     PostDTO likePost(long postId, long userId) {
-        logger.info("Liking post with id {} for user with id {}", postId, userId)
+        log.info("Liking post with id {} for user with id {}", postId, userId)
         Post post = postRepository.findById(postId).orElse(null)
         if (post == null) {
             throw new PostNotFoundException("Post with id ${postId} not found")
@@ -151,7 +139,7 @@ class PostService {
     }
 
     PostDTO unlikePost(long postId, long userId) {
-        logger.info("Unliking post with id {} for user with id {}", postId, userId)
+        log.info("Unliking post with id {} for user with id {}", postId, userId)
         Post post = postRepository.findById(postId).orElse(null)
         if (post == null) {
             throw new PostNotFoundException("Post with id ${postId} not found")
@@ -168,7 +156,7 @@ class PostService {
     }
 
     List<CommentDTO> getCommentsForPost(long postId) {
-        logger.info("Getting comments for post with id {}", postId)
+        log.info("Getting comments for post with id {}", postId)
         Post post = postRepository.findById(postId).orElse(null)
         if (post == null) {
             throw new PostNotFoundException("Post with id ${postId} not found")
@@ -184,7 +172,7 @@ class PostService {
     }
 
     CommentDTO createCommentForPost(long postId, CommentDTO commentDTO) {
-        logger.info("Creating comment for post with id {}", postId)
+        log.info("Creating comment for post with id {}", postId)
         Post post = postRepository.findById(postId).orElse(null)
         if (post == null) {
             throw new PostNotFoundException("Post with id ${postId} not found")
@@ -206,6 +194,17 @@ class PostService {
                 username: user.username,
                 content: comment.content,
                 timestamp: comment.timestamp
+        )
+    }
+
+    PostDTO getPostDto(Post post) {
+        return new PostDTO(
+                id: post.id,
+                userId: post.userId,
+                content: post.content,
+                timestamp: post.timestamp,
+                likes: post.likes.size(),
+                likedBy: post.likes.collect { like -> userRepository.findById(like.userId).get().username }
         )
     }
 }

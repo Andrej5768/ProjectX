@@ -14,6 +14,9 @@ class User {
     private List<Long> followers
     private List<Long> following
 
+    User() {
+    }
+
     Long getId() {
         return id
     }

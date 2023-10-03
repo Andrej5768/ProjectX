@@ -16,6 +16,9 @@ class Like {
     private Long userId
     private String username
 
+    Like() {
+    }
+
     Long getId() {
         return id
     }

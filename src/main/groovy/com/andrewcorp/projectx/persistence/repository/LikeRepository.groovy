@@ -10,5 +10,7 @@ import org.springframework.data.mongodb.repository.MongoRepository
 interface LikeRepository extends MongoRepository<Like, Long> {
     List<Like> findAllByPostId(Long postId);
 
-    List<Long> findAllByUserIdIn(List<Long> userIds);
+    Like findByPostIdAndUserId(Long postId, Long userId);
+
+    void deleteAllByPostId(Long postId);
 }

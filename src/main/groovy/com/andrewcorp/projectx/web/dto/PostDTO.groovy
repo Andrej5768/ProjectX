@@ -1,5 +1,6 @@
 package com.andrewcorp.projectx.web.dto
 
+import groovy.transform.CompileStatic
 import jakarta.annotation.Nullable
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -13,18 +14,16 @@ import java.time.LocalDateTime
  * @since 02.10.2023
  */
 class PostDTO {
-    @Nullable
-    private Long id
-    private Long userId
+    Long id
+    Long userId
     @NotBlank
     @NotNull
     @Size(min = 10, max = 2048)
-    private String content
-    @Nullable
-    private LocalDateTime timestamp
-    private int likes = 0
-    private List<String> likedBy = new ArrayList<>()
-    private List<CommentDTO> comments = new ArrayList<>()
+    String content
+    LocalDateTime timestamp
+    int likes = 0
+    List<String> likedBy = []
+    List<CommentDTO> comments = []
 
     Long getId() {
         return id

@@ -16,8 +16,11 @@ class Comment {
     private Long id
     private Long postId
     private Long userId
-    private String content
+    private String commentContent
     private LocalDateTime timestamp
+
+    Comment() {
+    }
 
     Long getId() {
         return id
@@ -36,11 +39,11 @@ class Comment {
     }
 
     String getContent() {
-        return content
+        return commentContent
     }
 
     void setContent(String content) {
-        this.content = content
+        this.commentContent = content
     }
 
     Long getPostId() {

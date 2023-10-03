@@ -35,6 +35,7 @@ class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/users/login").permitAll()
@@ -51,9 +52,7 @@ class SecurityConfig {
                 .sessionManagement { sessionManagement ->
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 }
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(Customizer.withDefaults())
-                .csrf(Customizer.withDefaults())
+                .csrf().disable()
 
 
         return http.build();

@@ -15,10 +15,13 @@ class Post {
     @Id
     private Long id
     private Long userId
-    private String content
+    private String postContent
     private LocalDateTime timestamp
-    private List<Like> likes = new ArrayList<>();
-    private List<Comment> comments = new ArrayList<>();
+    private List<Like> likes = []
+    private List<Comment> comments = []
+
+    Post() {
+    }
 
     Long getId() {
         return id
@@ -37,11 +40,11 @@ class Post {
     }
 
     String getContent() {
-        return content
+        return postContent
     }
 
     void setContent(String content) {
-        this.content = content
+        this.postContent = content
     }
 
     LocalDateTime getTimestamp() {
