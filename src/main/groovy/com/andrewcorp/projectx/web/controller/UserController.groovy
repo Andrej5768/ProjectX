@@ -5,21 +5,29 @@ import com.andrewcorp.projectx.web.dto.UserDTO
 import com.andrewcorp.projectx.service.UserService
 import com.andrewcorp.projectx.web.dto.UserPayload
 import com.andrewcorp.projectx.web.dto.UserRegisterRequest
+import com.andrewcorp.projectx.web.dto.UserResponse
 import com.andrewcorp.projectx.web.error.InvalidPasswordException
 import com.andrewcorp.projectx.web.error.UserAlreadyExistException
 import com.andrewcorp.projectx.web.error.UserNotFoundException
+import groovy.util.logging.Slf4j
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
+import org.slf4j.bridge.SLF4JBridgeHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
+
+import java.net.http.HttpRequest
+
 /**
  *
  * @author Andrew
  * @since 02.10.2023
  */
-
 @RestController
 @RequestMapping("/api/users")
 class UserController {
@@ -38,7 +46,8 @@ class UserController {
     }
 
     @GetMapping("/{userId}")
-    ResponseEntity<UserDTO> getUser(@PathVariable("userId") Long userId) {
+    @PreAuthorize("hasPermission(authentication, #userId, 'userId')")
+    ResponseEntity<UserDTO> getUser(@PathVariable("userId") String userId) {
         try {
             def userDTO = userService.getUserById(userId)
             return new ResponseEntity<>(userDTO, HttpStatus.OK)
@@ -48,7 +57,8 @@ class UserController {
     }
 
     @PutMapping("/{userId}")
-    ResponseEntity<UserDTO> updateUser(@PathVariable("userId") Long userId, @RequestBody UserDTO userDTO) {
+    @PreAuthorize("hasPermission(authentication, #userId, 'userId')")
+    ResponseEntity<UserDTO> updateUser(@PathVariable("userId") String userId, @Valid @RequestBody UserDTO userDTO) {
         try {
             def updatedUser = userService.updateUser(userId, userDTO)
             return new ResponseEntity<>(updatedUser, HttpStatus.OK)
@@ -58,7 +68,8 @@ class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId) {
+    @PreAuthorize("hasPermission(authentication, #userId, 'userId')")
+    ResponseEntity<Void> deleteUser(@PathVariable("userId") String userId) {
         try {
             userService.deleteUser(userId)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT)
@@ -68,13 +79,23 @@ class UserController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<UserDTO> loginUser(@RequestBody @Valid @NotNull UserPayload userPayload) {
+    ResponseEntity<?> loginUser(@RequestBody @Valid @NotNull UserPayload userPayload) {
         try {
-            UserDTO user = userService.loginUser(userPayload)
+            UserResponse user = userService.loginUser(userPayload)
             return new ResponseEntity<>(user, HttpStatus.OK)
         } catch (UserNotFoundException | InvalidPasswordException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED)
         }
     }
 
+    @PostMapping("/logout")
+    ResponseEntity<Void> logoutUser(HttpServletRequest request) {
+        try {
+            userService.logout(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString(), request.getHeader("Authorization").replace("Bearer ", ""))
+            SecurityContextHolder.getContext().setAuthentication(null)
+            return new ResponseEntity<>(HttpStatus.OK)
+        } catch (UserNotFoundException | InvalidPasswordException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN)
+        }
+    }
 }

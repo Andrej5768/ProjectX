@@ -13,44 +13,53 @@ import java.time.LocalDateTime
 @Document(collection = "comments")
 class Comment {
     @Id
-    private Long id
-    private Long postId
-    private Long userId
+    private String id
+    private String postId
+    private String userId
+    private String username
     private String commentContent
     private LocalDateTime timestamp
 
     Comment() {
     }
 
-    Long getId() {
+    String getId() {
         return id
     }
 
-    void setId(Long id) {
+    void setId(String id) {
         this.id = id
     }
 
-    Long getUserId() {
+    String getUserId() {
         return userId
     }
 
-    void setUserId(Long userId) {
+    void setUserId(String userId) {
         this.userId = userId
     }
 
-    String getContent() {
+    String getUsername() {
+        return username
+    }
+
+    void setUsername(String username) {
+        this.username = username
+    }
+
+    String getCommentContent() {
         return commentContent
     }
 
-    void setContent(String content) {
-        this.commentContent = content
+    void setCommentContent(String commentContent) {
+        this.commentContent = commentContent
     }
 
-    Long getPostId() {
+    String getPostId() {
         return postId
     }
 
-    void setPostId(Long postId) {
+    void setPostId(String postId) {
         this.postId = postId
     }
 

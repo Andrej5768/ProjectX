@@ -67,12 +67,13 @@ class JwtProvider {
         return KeyFactory.getInstance("RSA").generatePrivate(keySpec)
     }
 
-    def generateToken(String username) {
+    def generateToken(String username, String userId) {
         LocalDateTime currentTime = LocalDateTime.now()
         LocalDateTime expirationTime = currentTime.plusHours(jwtExpirationHours)
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("id", userId)
                 .setIssuedAt(java.sql.Timestamp.valueOf(currentTime))
                 .setExpiration(java.sql.Timestamp.valueOf(expirationTime))
                 .signWith(jwtSecretKey)
@@ -86,6 +87,15 @@ class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject()
+    }
+
+    def getUserIdFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(jwtSecretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id", String.class)
     }
 
     def validateToken(String token) {

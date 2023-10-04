@@ -2,6 +2,9 @@ package com.andrewcorp.projectx.persistence.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+
+import java.time.LocalDateTime
+
 /**
  *
  * @author Andrew
@@ -11,35 +14,36 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "likes")
 class Like {
     @Id
-    private Long id
-    private Long postId
-    private Long userId
+    private String id
+    private String postId
+    private String userId
     private String username
+    private LocalDateTime timestamp
 
     Like() {
     }
 
-    Long getId() {
+    String getId() {
         return id
     }
 
-    void setId(Long id) {
+    void setId(String id) {
         this.id = id
     }
 
-    Long getPostId() {
+    String getPostId() {
         return postId
     }
 
-    void setPostId(Long postId) {
+    void setPostId(String postId) {
         this.postId = postId
     }
 
-    Long getUserId() {
+    String getUserId() {
         return userId
     }
 
-    void setUserId(Long userId) {
+    void setUserId(String userId) {
         this.userId = userId
     }
 
@@ -49,5 +53,13 @@ class Like {
 
     void setUsername(String username) {
         this.username = username
+    }
+
+    LocalDateTime getTimestamp() {
+        return timestamp
+    }
+
+    void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp
     }
 }

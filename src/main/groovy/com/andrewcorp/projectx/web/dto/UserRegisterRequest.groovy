@@ -9,16 +9,18 @@ import jakarta.validation.constraints.Size
  * @author Andrew
  * @since 02.10.2023
  */
-@CompileStatic
-class UserRegisterRequest {
+class UserRegisterRequest implements Serializable {
     @NotBlank(message = "Username cannot be blank")
     @Size(min = 3, max = 20)
-    private String username
+    String username
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 6, max = 40)
-    private String password
+    String password
     @NotBlank(message = "Full name cannot be blank")
-    private String fullName
+    String fullName
+
+    UserRegisterRequest() {
+    }
 
     String getUsername() {
         return username

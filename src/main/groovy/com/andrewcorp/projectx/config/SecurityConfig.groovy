@@ -1,12 +1,15 @@
 package com.andrewcorp.projectx.config
 
+import com.andrewcorp.projectx.security.CustomPermissionEvaluator
 import com.andrewcorp.projectx.security.JwtAuthorizationFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpStatus
-import org.springframework.security.config.Customizer
+import org.springframework.security.access.PermissionEvaluator
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -23,13 +26,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+@EnableMethodSecurity
+class SecurityConfig{
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final CustomPermissionEvaluator customPermissionEvaluator;
 
     @Autowired
     SecurityConfig(
-            JwtAuthorizationFilter jwtAuthorizationFilter) {
+            JwtAuthorizationFilter jwtAuthorizationFilter, CustomPermissionEvaluator customPermissionEvaluator) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+        this.customPermissionEvaluator = customPermissionEvaluator
+    }
+
+    @Bean
+    protected MethodSecurityExpressionHandler createExpressionHandler() {
+        DefaultMethodSecurityExpressionHandler expressionHandler =
+                new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
+        return expressionHandler;
     }
 
     @Bean

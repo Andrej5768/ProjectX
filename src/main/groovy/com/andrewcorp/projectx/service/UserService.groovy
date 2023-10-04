@@ -6,6 +6,7 @@ import com.andrewcorp.projectx.security.JwtProvider
 import com.andrewcorp.projectx.web.dto.UserDTO
 import com.andrewcorp.projectx.web.dto.UserPayload
 import com.andrewcorp.projectx.web.dto.UserRegisterRequest
+import com.andrewcorp.projectx.web.dto.UserResponse
 import com.andrewcorp.projectx.web.error.InvalidPasswordException
 import com.andrewcorp.projectx.web.error.UserAlreadyExistException
 import com.andrewcorp.projectx.web.error.UserNotFoundException
@@ -36,7 +37,8 @@ class UserService {
 
     UserDTO registerUser(UserRegisterRequest userPayload) {
         log.info("Registering user with username {}", userPayload.username)
-        if (userRepository.findByUsername(userPayload.username).isPresent()) {
+        if (userRepository.existsByUsername(userPayload.username)) {
+            log.error("User with username {} already exists", userPayload.username)
             throw new UserAlreadyExistException("User with username ${userPayload.username} already exists")
         }
         User user = new User(
@@ -49,19 +51,21 @@ class UserService {
         return createUserDTO(savedUser)
     }
 
-    UserDTO getUserById(Long userId) {
+    UserDTO getUserById(String userId) {
         log.info("Getting user with id {}", userId)
         User userFromDb = userRepository.findById(userId).orElse(null)
         if (userFromDb == null) {
+            log.error("User with id {} not found", userId)
             throw new UserNotFoundException("User with id ${userId} not found")
         }
         return createUserDTO(userFromDb)
     }
 
-    UserDTO updateUser(Long userId, UserDTO userDTO) {
+    UserDTO updateUser(String userId, UserDTO userDTO) {
         log.info("Updating user with id {}", userId)
         User userFromDb = userRepository.findById(userId).orElse(null)
         if (userFromDb == null) {
+            log.error("User with id {} not found", userId)
             throw new UserNotFoundException("User with id ${userId} not found")
         }
 
@@ -82,69 +86,40 @@ class UserService {
         return createUserDTO(updatedUser)
     }
 
-    void deleteUser(Long userId) {
+    void deleteUser(String userId) {
         log.info("Deleting user with id {}", userId)
         User userFromDb = userRepository.findById(userId).orElse(null)
         if (userFromDb == null) {
+            log.error("User with id {} not found", userId)
             throw new UserNotFoundException("User with id ${userId} not found")
         }
         userRepository.deleteById(userId)
     }
 
-    UserDTO loginUser(UserPayload userPayload) {
+    UserResponse loginUser(UserPayload userPayload) {
         log.info("Logging in user with username {}", userPayload.username)
         User userFromDb = userRepository.findByUsername(userPayload.username).orElse(null)
         if (userFromDb == null) {
+            log.error("User with username {} not found", userPayload.username)
             throw new UserNotFoundException("User with username ${userPayload.username} not found")
         }
         if (!passwordEncoder.matches(userPayload.password, userFromDb.password)) {
+            log.error("Password is incorrect")
             throw new InvalidPasswordException("Password is incorrect")
         }
-        String token = jwtProvider.generateToken(userFromDb.username)
-        UserDTO newUser = new UserDTO(
+        String token = jwtProvider.generateToken(userFromDb.username, userFromDb.id)
+        UserResponse newUser = new UserResponse(
                 id: userFromDb.id,
                 username: userFromDb.username,
                 fullName: userFromDb.fullName,
                 followers: userFromDb.followers,
                 following: userFromDb.following,
+                token: token
         )
-        newUser.token = token
         return newUser
     }
 
-    void unfollowUser(long userId, long unfollowedUserId) {
-        log.info("Unfollowing user with id {} for user with id {}", unfollowedUserId, userId)
-        User userFromDb = userRepository.findById(userId).orElse(null)
-        if (userFromDb == null) {
-            throw new UserNotFoundException("User with id ${userId} not found")
-        }
-        User unfollowedUserFromDb = userRepository.findById(unfollowedUserId).orElse(null)
-        if (unfollowedUserFromDb == null) {
-            throw new UserNotFoundException("User with id ${unfollowedUserId} not found")
-        }
-        userFromDb.following.remove(unfollowedUserId)
-        unfollowedUserFromDb.followers.remove(userId)
-        userRepository.save(userFromDb)
-        userRepository.save(unfollowedUserFromDb)
-    }
-
-    void followUser(long userId, long followedUserId) {
-        log.info("Following user with id {} for user with id {}", followedUserId, userId)
-        User userFromDb = userRepository.findById(userId).orElse(null)
-        if (userFromDb == null) {
-            throw new UserNotFoundException("User with id ${userId} not found")
-        }
-        User followedUserFromDb = userRepository.findById(followedUserId).orElse(null)
-        if (followedUserFromDb == null) {
-            throw new UserNotFoundException("User with id ${followedUserId} not found")
-        }
-        userFromDb.following.add(followedUserId)
-        followedUserFromDb.followers.add(userId)
-        userRepository.save(userFromDb)
-        userRepository.save(followedUserFromDb)
-    }
-
-    private UserDTO createUserDTO(User user) {
+    private static UserDTO createUserDTO(User user) {
         return new UserDTO(
                 id: user.id,
                 username: user.username,
@@ -152,5 +127,10 @@ class UserService {
                 followers: user.followers,
                 following: user.following
         )
+    }
+
+    void logout(String userId, String token) {
+        log.info("Invalidating token for user id {}", userId)
+        jwtProvider.invalidateToken(token)
     }
 }

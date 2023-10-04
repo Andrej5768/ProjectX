@@ -1,6 +1,6 @@
 package com.andrewcorp.projectx.web.dto
 
-import groovy.transform.CompileStatic
+
 import jakarta.annotation.Nullable
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -13,40 +13,50 @@ import java.time.LocalDateTime
  * @author Andrew
  * @since 02.10.2023
  */
-class PostDTO {
-    Long id
-    Long userId
-    @NotBlank
-    @NotNull
+class PostDTO implements Serializable {
+    @Nullable
+    String id
+    @NotNull(message = "User ID cannot be null")
+    @NotBlank(message = "User ID cannot be blank")
+    String userId
+    @NotBlank(message = "Post content cannot be blank")
+    @NotNull(message = "Post content cannot be null")
     @Size(min = 10, max = 2048)
-    String content
+    String postContent
+    @Nullable
     LocalDateTime timestamp
+    @Nullable
     int likes = 0
+    @Nullable
     List<String> likedBy = []
+    @Nullable
     List<CommentDTO> comments = []
 
-    Long getId() {
+    PostDTO() {
+    }
+
+    String getId() {
         return id
     }
 
-    void setId(Long id) {
+    void setId(String id) {
         this.id = id
     }
 
-    Long getUserId() {
+    String getUserId() {
         return userId
     }
 
-    void setUserId(Long userId) {
+    void setUserId(String userId) {
         this.userId = userId
     }
 
-    String getContent() {
-        return content
+    String getPostContent() {
+        return postContent
     }
 
-    void setContent(String content) {
-        this.content = content
+    void setPostContent(String content) {
+        this.postContent = content
     }
 
     LocalDateTime getTimestamp() {

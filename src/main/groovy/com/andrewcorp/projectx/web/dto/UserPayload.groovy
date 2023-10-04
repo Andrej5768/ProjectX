@@ -9,18 +9,15 @@ import jakarta.validation.constraints.Size
  * @author Andrew
  * @since 02.10.2023
  */
-@CompileStatic
-class UserPayload {
-    @NotBlank
+class UserPayload implements Serializable {
+    @NotBlank(message = "Username cannot be blank")
     @Size(min = 3, max = 20)
-    final String username
-    @NotBlank
+    private String username
+    @NotBlank(message = "Password cannot be blank")
     @Size(min = 6, max = 40)
-    final String password
+    private String password
 
-    UserPayload(String username, String password) {
-        this.username = username
-        this.password = password
+    UserPayload() {
     }
 
     String getUsername() {

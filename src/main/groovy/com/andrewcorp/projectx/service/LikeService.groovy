@@ -17,29 +17,34 @@ import org.springframework.stereotype.Service
 @Slf4j
 @Service
 class LikeService {
-    def likeRepository
+    private final LikeRepository likeRepository
 
-    Like likePost(Post post, Long userId, String username) {
+    LikeService(LikeRepository likeRepository) {
+        this.likeRepository = likeRepository
+    }
+
+    Like likePost(Post post, String userId, String username) {
         log.info("Liking post with id {} for user with id {}", post.id, userId)
-        def like = new Like(postId: post.id, userId: userId, username: username)
+        def like = new Like(postId: post.id, userId: userId, username: username, timestamp: LocalDateTime.now())
         likeRepository.save(like)
     }
 
-    void unlikePost(Long postId, Long userId) {
+    void unlikePost(String postId, String userId) {
         log.info("Unliking post with id {} for user with id {}", postId, userId)
         def like = likeRepository.findByPostIdAndUserId(postId, userId)
         if (!like) {
+            log.error("Like with postId {} and userId {} not found", postId, userId)
             throw new LikeNotFoundException("Like with postId ${postId} and userId ${userId} not found")
         }
         likeRepository.delete(like)
     }
 
-    List<Like> getLikesForPost(Long postId) {
+    List<Like> getLikesForPost(String postId) {
         log.info("Getting likes for post with id {}", postId)
         likeRepository.findAllByPostId(postId)
     }
 
-    void deleteLikesByPost(Long postId) {
+    void deleteLikesByPost(String postId) {
         log.info("Deleting likes for post with id {}", postId)
         likeRepository.deleteAllByPostId(postId)
     }

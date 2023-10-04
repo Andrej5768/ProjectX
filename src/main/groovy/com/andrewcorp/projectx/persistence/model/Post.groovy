@@ -13,8 +13,8 @@ import java.time.LocalDateTime
 @Document(collection = "posts")
 class Post {
     @Id
-    private Long id
-    private Long userId
+    private String id
+    private String userId
     private String postContent
     private LocalDateTime timestamp
     private List<Like> likes = []
@@ -23,19 +23,19 @@ class Post {
     Post() {
     }
 
-    Long getId() {
+    String getId() {
         return id
     }
 
-    void setId(Long id) {
+    void setId(String id) {
         this.id = id
     }
 
-    Long getUserId() {
+    String getUserId() {
         return userId
     }
 
-    void setUserId(Long userId) {
+    void setUserId(String userId) {
         this.userId = userId
     }
 

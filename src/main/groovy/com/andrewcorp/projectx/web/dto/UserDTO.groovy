@@ -1,8 +1,8 @@
 package com.andrewcorp.projectx.web.dto
 
-import groovy.transform.CompileStatic
-import jakarta.annotation.Nullable
+
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
 /**
@@ -10,19 +10,23 @@ import jakarta.validation.constraints.Size
  * @author Andrew
  * @since 02.10.2023
  */
-class UserDTO {
-
-    private Long id
+class UserDTO implements Serializable {
+    @NotNull
+    private String id
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 3, max = 20)
     private String username
+    @NotBlank(message = "Full name cannot be blank")
+    @Size(min = 6, max = 40)
     private String fullName
-    private List<Long> followers
-    private List<Long> following
+    private List<String> followers
+    private List<String> following
 
-    Long getId() {
+    String getId() {
         return id
     }
 
-    void setId(Long id) {
+    void setId(String id) {
         this.id = id
     }
 
@@ -42,19 +46,19 @@ class UserDTO {
         this.fullName = fullName
     }
 
-    List<Long> getFollowers() {
+    List<String> getFollowers() {
         return followers
     }
 
-    void setFollowers(List<Long> followers) {
+    void setFollowers(List<String> followers) {
         this.followers = followers
     }
 
-    List<Long> getFollowing() {
+    List<String> getFollowing() {
         return following
     }
 
-    void setFollowing(List<Long> following) {
+    void setFollowing(List<String> following) {
         this.following = following
     }
 }

@@ -41,3 +41,6 @@ services:
 networks:
     projectx-network:
         driver: bridge
+volumes:
+    mongo_data:
+        driver: local

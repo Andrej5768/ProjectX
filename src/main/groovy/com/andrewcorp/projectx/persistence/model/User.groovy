@@ -7,21 +7,21 @@ import org.springframework.data.mongodb.core.mapping.Document
 class User {
 
     @Id
-    private Long id
+    private String id
     private String username
     private String password
     private String fullName
-    private List<Long> followers
-    private List<Long> following
+    private List<String> followers
+    private List<String> following
 
     User() {
     }
 
-    Long getId() {
+    String getId() {
         return id
     }
 
-    void setId(Long id) {
+    void setId(String id) {
         this.id = id
     }
 
@@ -49,19 +49,19 @@ class User {
         this.fullName = fullName
     }
 
-    List<Long> getFollowers() {
+    List<String> getFollowers() {
         return followers
     }
 
-    void setFollowers(List<Long> followers) {
+    void setFollowers(List<String> followers) {
         this.followers = followers
     }
 
-    List<Long> getFollowing() {
+    List<String> getFollowing() {
         return following
     }
 
-    void setFollowing(List<Long> following) {
+    void setFollowing(List<String> following) {
         this.following = following
     }
 }
