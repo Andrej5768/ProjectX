@@ -32,7 +32,7 @@ Clone the repository:
 
 
 ``` bash
-git clone https://github.com/your-username/projectx.git
+git clone https://github.com/Andrej5768/ProjectX.git
 ```
 
 Set the environment for connect to MongoDb in the `application.properties` file
