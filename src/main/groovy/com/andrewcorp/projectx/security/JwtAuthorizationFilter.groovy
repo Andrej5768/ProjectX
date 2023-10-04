@@ -21,14 +21,14 @@ import org.springframework.web.filter.OncePerRequestFilter
  */
 @Component
 class JwtAuthorizationFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class)
 
-    private final JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider
 
-    private static final String USER_CLAIM = "USER";
+    private static final String USER_CLAIM = "USER"
 
     JwtAuthorizationFilter(JwtProvider jwtProvider) {
-        this.jwtProvider = jwtProvider;
+        this.jwtProvider = jwtProvider
     }
 
     @Override
@@ -50,7 +50,7 @@ class JwtAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication)
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
-                return;
+                return
             }
         }
         chain.doFilter(request, response)

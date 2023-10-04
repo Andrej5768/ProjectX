@@ -2,13 +2,12 @@ package com.andrewcorp.projectx.web.error
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import org.springframework.http.HttpStatus
 
 /**
  *
@@ -49,8 +48,9 @@ class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler 
         return handleExceptionInternal(ex, messageSource.getMessage("user.already.exists", null, request.getLocale()), null, HttpStatus.CONFLICT, request)
     }
 
-    @ExceptionHandler(value = [InvalidPasswordException.class])\
-    ResponseEntity<?> handleInvalidPasswordException(Exception ex, WebRequest request) {
+    @ExceptionHandler(value = [InvalidPasswordException.class])
+    \
+ ResponseEntity<?> handleInvalidPasswordException(Exception ex, WebRequest request) {
         logger.error("Invalid password", ex)
         return handleExceptionInternal(ex, messageSource.getMessage("invalid.password", null, request.getLocale()), null, HttpStatus.BAD_REQUEST, request)
     }

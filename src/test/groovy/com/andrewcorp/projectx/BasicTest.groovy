@@ -1,12 +1,11 @@
 package com.andrewcorp.projectx
 
-import com.andrewcorp.projectx.config.SecurityConfig
+
 import com.andrewcorp.projectx.persistence.model.User
 import com.andrewcorp.projectx.persistence.repository.CommentRepository
 import com.andrewcorp.projectx.persistence.repository.LikeRepository
 import com.andrewcorp.projectx.persistence.repository.PostRepository
 import com.andrewcorp.projectx.persistence.repository.UserRepository
-import com.andrewcorp.projectx.security.JwtAuthorizationFilter
 import com.andrewcorp.projectx.security.JwtProvider
 import com.andrewcorp.projectx.service.FollowService
 import com.andrewcorp.projectx.service.PostService
@@ -64,7 +63,7 @@ class BasicTest extends Specification {
     }
 
     // Helper method to convert objects to JSON strings
-    def String asJsonString(final Object obj) {
+    String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj)
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import com.andrewcorp.projectx.persistence.model.Post
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.mongodb.repository.MongoRepository
+
 /**
  *
  * @author Andrew

@@ -1,8 +1,4 @@
 package com.andrewcorp.projectx.web.error
-
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.http.HttpStatus
-
 /**
  *
  * @author Andrew

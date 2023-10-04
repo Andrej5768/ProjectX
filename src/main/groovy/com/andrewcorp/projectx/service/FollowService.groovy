@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 @Slf4j
 @Service
 class FollowService {
-private final UserRepository userRepository
+    private final UserRepository userRepository
 
     FollowService(UserRepository userRepository) {
         this.userRepository = userRepository

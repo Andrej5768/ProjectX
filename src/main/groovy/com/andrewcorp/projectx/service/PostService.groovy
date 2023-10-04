@@ -2,17 +2,18 @@ package com.andrewcorp.projectx.service
 
 import com.andrewcorp.projectx.persistence.model.Comment
 import com.andrewcorp.projectx.persistence.model.Like
+import com.andrewcorp.projectx.persistence.model.Post
 import com.andrewcorp.projectx.persistence.model.User
 import com.andrewcorp.projectx.persistence.repository.CommentRepository
-import com.andrewcorp.projectx.web.dto.CommentDTO
-import com.andrewcorp.projectx.web.dto.PostDTO
-import com.andrewcorp.projectx.persistence.model.Post
 import com.andrewcorp.projectx.persistence.repository.PostRepository
 import com.andrewcorp.projectx.persistence.repository.UserRepository
+import com.andrewcorp.projectx.web.dto.CommentDTO
+import com.andrewcorp.projectx.web.dto.PostDTO
 import com.andrewcorp.projectx.web.error.PostNotFoundException
 import com.andrewcorp.projectx.web.error.UserNotFoundException
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
+
 import java.time.LocalDateTime
 
 /**
@@ -111,7 +112,7 @@ class PostService {
         }
         List<Post> posts = postRepository.findAllByUserId(userId)
         log.info("Found {} posts for user with id {}", posts.size(), userId)
-        return posts.collect { post -> getPostDto(post)}
+        return posts.collect { post -> getPostDto(post) }
     }
 
     List<PostDTO> getFeedByUser(String userId) {
@@ -123,7 +124,7 @@ class PostService {
         }
         List<Post> posts = postRepository.findAllByUserIdIn(user.following)
         log.info("Found {} posts for user with id {}", posts.size(), userId)
-        return posts.collect { post -> getPostDto(post)}
+        return posts.collect { post -> getPostDto(post) }
     }
 
     PostDTO likePost(String postId, String userId) {

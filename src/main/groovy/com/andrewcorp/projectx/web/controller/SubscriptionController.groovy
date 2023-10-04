@@ -1,16 +1,17 @@
 package com.andrewcorp.projectx.web.controller
 
-import com.andrewcorp.projectx.service.FollowService;
-import com.andrewcorp.projectx.service.UserService;
+import com.andrewcorp.projectx.service.FollowService
 import com.andrewcorp.projectx.web.error.UserNotFoundException
 import com.sun.jdi.request.DuplicateRequestException
-import groovy.util.logging.Slf4j;
+import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.*
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 /**
  *

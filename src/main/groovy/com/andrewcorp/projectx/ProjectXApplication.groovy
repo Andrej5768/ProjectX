@@ -1,7 +1,6 @@
 package com.andrewcorp.projectx
 
 import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
@@ -13,7 +12,7 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 @SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 class ProjectXApplication {
 
-	static void main(String[] args) {
-		SpringApplication.run(ProjectXApplication, args)
-	}
+    static void main(String[] args) {
+        SpringApplication.run(ProjectXApplication, args)
+    }
 }

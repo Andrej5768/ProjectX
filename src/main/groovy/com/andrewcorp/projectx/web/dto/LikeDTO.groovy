@@ -1,7 +1,7 @@
-package com.andrewcorp.projectx.web.dto;
+package com.andrewcorp.projectx.web.dto
 
-import java.io.Serializable
-import java.time.LocalDateTime;
+
+import java.time.LocalDateTime
 
 /**
  * @author Andrew

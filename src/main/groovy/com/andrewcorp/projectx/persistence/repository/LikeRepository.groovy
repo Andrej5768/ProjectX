@@ -1,4 +1,4 @@
-package com.andrewcorp.projectx.persistence.repository;
+package com.andrewcorp.projectx.persistence.repository
 
 import com.andrewcorp.projectx.persistence.model.Like
 import org.springframework.data.domain.Page

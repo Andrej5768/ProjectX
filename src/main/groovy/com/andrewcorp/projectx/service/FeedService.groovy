@@ -15,7 +15,6 @@ import com.andrewcorp.projectx.web.error.UserNotFoundException
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
@@ -72,7 +71,7 @@ class FeedService {
         return pagedFeedDTO
     }
 
-     static List<PostDTO> getPosts(Page<Post> posts) {
+    static List<PostDTO> getPosts(Page<Post> posts) {
         List<PostDTO> postDTOs = new ArrayList<>()
         if (posts == null) {
             return postDTOs
@@ -92,7 +91,7 @@ class FeedService {
         return postDTOs
     }
 
-     static List<LikeDTO> getLikes(Page<Like> likes) {
+    static List<LikeDTO> getLikes(Page<Like> likes) {
         List<LikeDTO> likeDTOs = new ArrayList<>()
         if (likes == null) {
             return likeDTOs
@@ -109,7 +108,7 @@ class FeedService {
         return likeDTOs
     }
 
-     static List<CommentDTO> getComments(Page<Comment> comments) {
+    static List<CommentDTO> getComments(Page<Comment> comments) {
         List<CommentDTO> commentDTOs = new ArrayList<>()
         if (comments == null) {
             return commentDTOs

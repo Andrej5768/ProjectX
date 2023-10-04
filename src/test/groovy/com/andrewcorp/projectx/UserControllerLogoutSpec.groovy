@@ -1,16 +1,14 @@
 package com.andrewcorp.projectx
 
 import com.andrewcorp.projectx.persistence.model.User
-import com.andrewcorp.projectx.web.dto.UserResponse
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.security.core.context.SecurityContextHolder
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+
 /**
  *
  * @author Andrew

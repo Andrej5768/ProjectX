@@ -1,27 +1,22 @@
 package com.andrewcorp.projectx.web.controller
 
-import com.andrewcorp.projectx.web.dto.PostDTO
-import com.andrewcorp.projectx.web.dto.UserDTO
 import com.andrewcorp.projectx.service.UserService
+import com.andrewcorp.projectx.web.dto.UserDTO
 import com.andrewcorp.projectx.web.dto.UserPayload
 import com.andrewcorp.projectx.web.dto.UserRegisterRequest
 import com.andrewcorp.projectx.web.dto.UserResponse
 import com.andrewcorp.projectx.web.error.InvalidPasswordException
 import com.andrewcorp.projectx.web.error.UserAlreadyExistException
 import com.andrewcorp.projectx.web.error.UserNotFoundException
-import groovy.util.logging.Slf4j
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
-import org.slf4j.bridge.SLF4JBridgeHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-
-import java.net.http.HttpRequest
 
 /**
  *

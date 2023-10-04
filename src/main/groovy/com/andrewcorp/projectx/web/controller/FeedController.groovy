@@ -1,17 +1,13 @@
 package com.andrewcorp.projectx.web.controller
 
-import com.andrewcorp.projectx.web.error.UserNotFoundException
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
 import com.andrewcorp.projectx.service.FeedService
 import com.andrewcorp.projectx.web.dto.PagedFeedDTO
-import org.springframework.http.ResponseEntity
+import com.andrewcorp.projectx.web.error.UserNotFoundException
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.*
 
 /**
  *

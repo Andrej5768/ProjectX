@@ -5,20 +5,15 @@ import com.andrewcorp.projectx.persistence.model.Like
 import com.andrewcorp.projectx.persistence.model.Post
 import com.andrewcorp.projectx.persistence.model.User
 import com.andrewcorp.projectx.service.FeedService
-import com.andrewcorp.projectx.web.controller.FeedController
-import com.andrewcorp.projectx.web.dto.PagedFeedDTO
-import com.andrewcorp.projectx.web.error.UserNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 
 import java.time.LocalDateTime
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
  *

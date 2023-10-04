@@ -1,14 +1,10 @@
 package com.andrewcorp.projectx
 
 import com.andrewcorp.projectx.persistence.model.User
-import spock.lang.Specification
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
@@ -18,7 +14,7 @@ class UserControllerFollowSpec extends BasicTest {
     String userFollowId
     String followerToken
 
-    void setup () {
+    void setup() {
         userFollowId = userRepository.save(new User(username: "tesfollowtuser", password: passwordEncoder.encode("testpassword"))).id
         followerToken = jwtProvider.generateToken("tesfollowtuser", userFollowId)
     }
